@@ -10,11 +10,17 @@ public class Publisher : Entity
 
     }
 
-    private Publisher(Guid id, Name name) : base(id) => Name = name;
+    private Publisher(Guid id, string name, DateTime bookPublished) : base(id)
+    {
+        Name = name;
+        BookPublishedUtc = bookPublished;
+    }
 
-    public Name Name { get; private set; }
+    public string Name { get; private set; } = null!;
+
+    public DateTime BookPublishedUtc { get; private set; }
 
     public Collection<Book>? Books { get; set; }
 
-    public static Publisher Create(Name name) => new(Guid.NewGuid(), name);
+    public static Publisher Create(string name, DateTime bookPublished) => new(Guid.NewGuid(), name, bookPublished);
 }

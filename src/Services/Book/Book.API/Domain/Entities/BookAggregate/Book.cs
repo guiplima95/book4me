@@ -1,4 +1,6 @@
-﻿namespace Book.API;
+﻿using System.Collections.ObjectModel;
+
+namespace Book.API;
 
 public class Book : Entity
 {
@@ -7,21 +9,31 @@ public class Book : Entity
     {
 
     }
-    private Book(Guid id, Title title, ISBN isbn, int amountPages, Guid publisherId, Guid authorId) : base(id)
+    private Book(
+        Guid id,
+        string title,
+        string isbn,
+        int amountPages,
+        GenreType genre,
+        Guid publisherId,
+        Author author) : base(id)
     {
         Title = title;
         ISBN = isbn;
         AmountPages = amountPages;
+        GenreType = genre;
         PublisherId = publisherId;
-        AuthorId = authorId;
+        Author = author;
     }
 
-    public Title Title { get; private set; }
-    public ISBN ISBN { get; private set; }
+    public string Title { get; private set; } = null!;
+    public string ISBN { get; private set; } = null!;
     public int AmountPages { get; private set; }
-    public Guid AuthorId { get; private set; }
+    public GenreType GenreType { get; private set; }
+    public Author Author { get; private set; } = null!;
     public Guid PublisherId { get; private set; }
 
-    public static Book Create(Title title, ISBN isbn, int amountPages, Guid publisherId, Guid authorId)
-        => new(new Guid(), title, isbn, amountPages, publisherId, authorId);
+    public static Book Create(
+        string title, string isbn, int amountPages, GenreType genre, Guid publisherId, Author author)
+        => new(new Guid(), title, isbn, amountPages, genre, publisherId, author);
 }

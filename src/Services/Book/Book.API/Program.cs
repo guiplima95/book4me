@@ -1,19 +1,31 @@
+using System.Net;
+using Book.API;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Configure gRPC:
+// builder.WebHost.ConfigureKestrel(options =>
+// {
+//     int grpcPort = builder.Configuration.GetValue("GRPC_PORT", 5900);
+//     int httpPort = builder.Configuration.GetValue("PORT", 5901);
+
+//     options.Listen(IPAddress.Any, httpPort, listenOptions => listenOptions.Protocols = HttpProtocols.Http1AndHttp2);
+//     options.Listen(IPAddress.Any, grpcPort, listenOptions => listenOptions.Protocols = HttpProtocols.Http2);
+// });
+
+builder.AddSwagger();
+builder.AddCustomDbContext(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerApi();
 }
 
 app.UseHttpsRedirection();
+
+app.MapBookApi();
 
 app.Run();
